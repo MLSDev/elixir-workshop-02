@@ -12,16 +12,27 @@ defmodule HolidayApp.Holidays do
   Returns the list of holidays.
 
   ## Examples
+      iex> list_holidays(start_date, end_date)
+      {:ok, [%Holiday{}, ...], start_date, end_date}
 
       iex> list_holidays()
-      [%Holiday{}, ...]
+      {:ok, [%Holiday{}, ...], ~D[2018-01-01], ~D[2018-12-31]}
 
   """
-  def list_holidays do
-    Holiday
-    |> order_by(:date)
-    |> Repo.all
+  def list_holidays(start_date \\ nil, end_date \\ nil) do
+    start_date = start_date || beginning_of_year()
+    end_date = end_date || end_of_year()
+
+    holidays =
+      Holiday
+      |> where([h], h.date >= ^start_date and h.date <= ^end_date)
+      |> order_by(asc: :date)
+      |> Repo.all
+    {:ok, holidays, start_date, end_date}
   end
+
+  defp beginning_of_year, do: Timex.today |> Timex.beginning_of_year
+  defp end_of_year, do: Timex.today |> Timex.end_of_year
 
   @doc """
   Gets a single holiday.

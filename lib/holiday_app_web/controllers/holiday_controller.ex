@@ -5,7 +5,7 @@ defmodule HolidayAppWeb.HolidayController do
   alias HolidayApp.Holidays.Holiday
 
   def index(conn, _params) do
-    holidays = Holidays.list_holidays()
+    {:ok, holidays, _, _} = Holidays.list_holidays()
     render(conn, "index.html", holidays: holidays)
   end
 

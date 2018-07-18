@@ -20,7 +20,7 @@ defmodule HolidayApp.Mixfile do
   def application do
     [
       mod: {HolidayApp.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :timex]
     ]
   end
 
@@ -41,7 +41,8 @@ defmodule HolidayApp.Mixfile do
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
-      {:ex_machina, "~> 2.2", only: :test}
+      {:ex_machina, "~> 2.2", only: :test},
+      {:timex, "~> 3.0"}
     ]
   end
 
