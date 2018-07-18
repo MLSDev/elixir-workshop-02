@@ -9,18 +9,7 @@ defmodule HolidayAppWeb.Router do
     plug :put_secure_browser_headers
   end
 
-  pipeline :api do
-    plug :accepts, ["json"]
-  end
-
   scope "/", HolidayAppWeb do
-    pipe_through :browser # Use the default browser stack
-
-    get "/", PageController, :index
+    pipe_through :browser
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", HolidayAppWeb do
-  #   pipe_through :api
-  # end
 end
