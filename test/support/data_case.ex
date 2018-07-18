@@ -22,6 +22,7 @@ defmodule HolidayApp.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import HolidayApp.DataCase
+      import HolidayApp.Factory
     end
   end
 

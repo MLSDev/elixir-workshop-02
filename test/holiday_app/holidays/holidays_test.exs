@@ -6,63 +6,52 @@ defmodule HolidayApp.HolidaysTest do
   describe "holidays" do
     alias HolidayApp.Holidays.Holiday
 
-    @valid_attrs %{date: ~D[2010-04-17], kind: "some kind", title: "some title"}
-    @update_attrs %{date: ~D[2011-05-18], kind: "some updated kind", title: "some updated title"}
-    @invalid_attrs %{date: nil, kind: nil, title: nil}
-
-    def holiday_fixture(attrs \\ %{}) do
-      {:ok, holiday} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> Holidays.create_holiday()
-
-      holiday
-    end
-
     test "list_holidays/0 returns all holidays" do
-      holiday = holiday_fixture()
+      holiday = insert(:holiday)
       assert Holidays.list_holidays() == [holiday]
     end
 
     test "get_holiday!/1 returns the holiday with given id" do
-      holiday = holiday_fixture()
+      holiday = insert(:holiday)
       assert Holidays.get_holiday!(holiday.id) == holiday
     end
 
     test "create_holiday/1 with valid data creates a holiday" do
-      assert {:ok, %Holiday{} = holiday} = Holidays.create_holiday(@valid_attrs)
-      assert holiday.date == ~D[2010-04-17]
-      assert holiday.kind == "some kind"
-      assert holiday.title == "some title"
+      attrs = params_for(:holiday)
+      assert {:ok, %Holiday{} = holiday} = Holidays.create_holiday(attrs)
+      assert holiday.date == attrs[:date]
+      assert holiday.kind == attrs[:kind]
+      assert holiday.title == attrs[:title]
     end
 
     test "create_holiday/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Holidays.create_holiday(@invalid_attrs)
+      attrs = %{kind: nil}
+      assert {:error, %Ecto.Changeset{}} = Holidays.create_holiday(attrs)
     end
 
     test "update_holiday/2 with valid data updates the holiday" do
-      holiday = holiday_fixture()
-      assert {:ok, holiday} = Holidays.update_holiday(holiday, @update_attrs)
+      holiday = insert(:holiday, kind: "holiday")
+      attrs = %{kind: "workday"}
+      assert {:ok, holiday} = Holidays.update_holiday(holiday, attrs)
       assert %Holiday{} = holiday
-      assert holiday.date == ~D[2011-05-18]
-      assert holiday.kind == "some updated kind"
-      assert holiday.title == "some updated title"
+      assert holiday.kind == "workday"
     end
 
     test "update_holiday/2 with invalid data returns error changeset" do
-      holiday = holiday_fixture()
-      assert {:error, %Ecto.Changeset{}} = Holidays.update_holiday(holiday, @invalid_attrs)
+      holiday = insert(:holiday)
+      attrs = %{kind: nil}
+      assert {:error, %Ecto.Changeset{}} = Holidays.update_holiday(holiday, attrs)
       assert holiday == Holidays.get_holiday!(holiday.id)
     end
 
     test "delete_holiday/1 deletes the holiday" do
-      holiday = holiday_fixture()
+      holiday = insert(:holiday)
       assert {:ok, %Holiday{}} = Holidays.delete_holiday(holiday)
       assert_raise Ecto.NoResultsError, fn -> Holidays.get_holiday!(holiday.id) end
     end
 
     test "change_holiday/1 returns a holiday changeset" do
-      holiday = holiday_fixture()
+      holiday = insert(:holiday)
       assert %Ecto.Changeset{} = Holidays.change_holiday(holiday)
     end
   end

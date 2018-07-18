@@ -1,17 +1,6 @@
 defmodule HolidayAppWeb.HolidayControllerTest do
   use HolidayAppWeb.ConnCase
 
-  alias HolidayApp.Holidays
-
-  @create_attrs %{date: ~D[2010-04-17], kind: "some kind", title: "some title"}
-  @update_attrs %{date: ~D[2011-05-18], kind: "some updated kind", title: "some updated title"}
-  @invalid_attrs %{date: nil, kind: nil, title: nil}
-
-  def fixture(:holiday) do
-    {:ok, holiday} = Holidays.create_holiday(@create_attrs)
-    holiday
-  end
-
   describe "index" do
     test "lists all holidays", %{conn: conn} do
       conn = get conn, holiday_path(conn, :index)
@@ -28,7 +17,8 @@ defmodule HolidayAppWeb.HolidayControllerTest do
 
   describe "create holiday" do
     test "redirects to show when data is valid", %{conn: conn} do
-      conn = post conn, holiday_path(conn, :create), holiday: @create_attrs
+      params = string_params_for(:holiday)
+      conn = post conn, holiday_path(conn, :create), holiday: params
 
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == holiday_path(conn, :show, id)
@@ -38,51 +28,50 @@ defmodule HolidayAppWeb.HolidayControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post conn, holiday_path(conn, :create), holiday: @invalid_attrs
+      params = %{"kind" => ""}
+      conn = post conn, holiday_path(conn, :create), holiday: params
       assert html_response(conn, 200) =~ "New Holiday"
     end
   end
 
   describe "edit holiday" do
-    setup [:create_holiday]
-
-    test "renders form for editing chosen holiday", %{conn: conn, holiday: holiday} do
+    test "renders form for editing chosen holiday", %{conn: conn} do
+      holiday = insert(:holiday)
       conn = get conn, holiday_path(conn, :edit, holiday)
       assert html_response(conn, 200) =~ "Edit Holiday"
     end
   end
 
   describe "update holiday" do
-    setup [:create_holiday]
+    setup %{conn: conn} do
+      holiday = insert(:holiday)
+      {:ok, conn: conn, holiday: holiday}
+    end
 
     test "redirects when data is valid", %{conn: conn, holiday: holiday} do
-      conn = put conn, holiday_path(conn, :update, holiday), holiday: @update_attrs
+      params = %{"kind" => "workday"}
+      conn = put conn, holiday_path(conn, :update, holiday), holiday: params
       assert redirected_to(conn) == holiday_path(conn, :show, holiday)
 
       conn = get conn, holiday_path(conn, :show, holiday)
-      assert html_response(conn, 200) =~ "some updated kind"
+      assert html_response(conn, 200) =~ "workday"
     end
 
     test "renders errors when data is invalid", %{conn: conn, holiday: holiday} do
-      conn = put conn, holiday_path(conn, :update, holiday), holiday: @invalid_attrs
+      params = %{"kind" => ""}
+      conn = put conn, holiday_path(conn, :update, holiday), holiday: params
       assert html_response(conn, 200) =~ "Edit Holiday"
     end
   end
 
   describe "delete holiday" do
-    setup [:create_holiday]
-
-    test "deletes chosen holiday", %{conn: conn, holiday: holiday} do
+    test "deletes chosen holiday", %{conn: conn} do
+      holiday = insert(:holiday)
       conn = delete conn, holiday_path(conn, :delete, holiday)
       assert redirected_to(conn) == holiday_path(conn, :index)
       assert_error_sent 404, fn ->
         get conn, holiday_path(conn, :show, holiday)
       end
     end
-  end
-
-  defp create_holiday(_) do
-    holiday = fixture(:holiday)
-    {:ok, holiday: holiday}
   end
 end
