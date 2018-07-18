@@ -16,5 +16,7 @@ defmodule HolidayApp.Holidays.Holiday do
     holiday
     |> cast(attrs, [:title, :date, :kind])
     |> validate_required([:title, :date, :kind])
+    |> validate_length(:title, min: 3, max: 64)
+    |> validate_inclusion(:kind, ["holiday", "workday"])
   end
 end
