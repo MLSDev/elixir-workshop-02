@@ -19,7 +19,7 @@
 
   <div class="form-group">
     <%= label f, :kind, class: "control-label" %>
-    <%= text_input f, :kind, class: "form-control" %>
+    <%= select f, :kind, ["holiday", "workday"], class: "form-control" %>
     <%= error_tag f, :kind %>
   </div>
 
