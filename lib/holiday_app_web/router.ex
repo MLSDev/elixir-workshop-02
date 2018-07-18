@@ -11,5 +11,8 @@ defmodule HolidayAppWeb.Router do
 
   scope "/", HolidayAppWeb do
     pipe_through :browser
+
+    get "/", HolidayController, :index
+    resources "/holidays", HolidayController
   end
 end
