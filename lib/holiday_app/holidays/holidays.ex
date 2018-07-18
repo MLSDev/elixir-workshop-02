@@ -18,7 +18,9 @@ defmodule HolidayApp.Holidays do
 
   """
   def list_holidays do
-    Repo.all(Holiday)
+    Holiday
+    |> order_by(:date)
+    |> Repo.all
   end
 
   @doc """

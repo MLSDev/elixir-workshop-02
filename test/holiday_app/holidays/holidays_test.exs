@@ -11,6 +11,15 @@ defmodule HolidayApp.HolidaysTest do
       assert Holidays.list_holidays() == [holiday]
     end
 
+    test "list_holidays/0 sorts all holidays by date, ascending" do
+      insert(:holiday, %{date: ~D[2018-12-25]})
+      insert(:holiday, %{date: ~D[2018-01-07]})
+
+      [xmas1, xmas2] = Holidays.list_holidays()
+      assert xmas1.date == ~D[2018-01-07]
+      assert xmas2.date == ~D[2018-12-25]
+    end
+
     test "get_holiday!/1 returns the holiday with given id" do
       holiday = insert(:holiday)
       assert Holidays.get_holiday!(holiday.id) == holiday
