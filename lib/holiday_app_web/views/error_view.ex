@@ -1,12 +1,16 @@
 defmodule HolidayAppWeb.ErrorView do
   use HolidayAppWeb, :view
 
+  def render("400.html", _assigns) do
+    "Bad Request"
+  end
+
   def render("404.html", _assigns) do
-    "Page not found"
+    "Not Found"
   end
 
   def render("500.html", _assigns) do
-    "Internal server error"
+    "Internal Server Error"
   end
 
   # In case no render clause matches or no

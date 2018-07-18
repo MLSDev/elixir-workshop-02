@@ -4,6 +4,8 @@ defmodule HolidayAppWeb.HolidayController do
   alias HolidayApp.Holidays
   alias HolidayApp.Holidays.Holiday
 
+  action_fallback HolidayAppWeb.FallbackController
+
   def index(conn, params) do
     start_date = params["start_date"]
     end_date = params["end_date"]
