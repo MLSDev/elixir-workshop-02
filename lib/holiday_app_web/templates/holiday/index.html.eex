@@ -1,5 +1,25 @@
 <h2>Listing Holidays</h2>
 
+<%= form_for @conn, holiday_path(@conn, :index), [method: :get, class: "form-inline"], fn f -> %>
+  <div class="form-group">
+    <%= label f, "From:", class: "control-label" %>
+    <%= date_input f, :start_date, value: @start_date, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, "To:", class: "control-label" %>
+    <%= date_input f, :end_date, value: @end_date, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Update", class: "btn btn-primary" %>
+  </div>
+
+  <div class="form-group">
+    <%= link "Reset", to: holiday_path(@conn, :index) %>
+  </div>
+<% end %>
+
 <table class="table">
   <thead>
     <tr>

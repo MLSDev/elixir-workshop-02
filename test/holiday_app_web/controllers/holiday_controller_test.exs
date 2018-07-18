@@ -6,6 +6,15 @@ defmodule HolidayAppWeb.HolidayControllerTest do
       conn = get conn, holiday_path(conn, :index)
       assert html_response(conn, 200) =~ "Listing Holidays"
     end
+
+    test "accepts date range", %{conn: conn} do
+      insert(:holiday, %{date: ~D[2018-01-01], title: "New Year"})
+      insert(:holiday, %{date: ~D[2018-02-14], title: "St. Valentine"})
+      conn = get conn, holiday_path(conn, :index, start_date: "2018-01-01", end_date: "2018-01-31")
+      response = html_response(conn, 200)
+      assert response =~ "New Year"
+      refute response =~ "St. Valentine"
+    end
   end
 
   describe "new holiday" do

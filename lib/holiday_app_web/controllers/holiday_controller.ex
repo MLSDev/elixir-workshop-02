@@ -4,9 +4,11 @@ defmodule HolidayAppWeb.HolidayController do
   alias HolidayApp.Holidays
   alias HolidayApp.Holidays.Holiday
 
-  def index(conn, _params) do
-    {:ok, holidays, _, _} = Holidays.list_holidays()
-    render(conn, "index.html", holidays: holidays)
+  def index(conn, params) do
+    start_date = params["start_date"]
+    end_date = params["end_date"]
+    {:ok, holidays, start_date, end_date} = Holidays.list_holidays(start_date, end_date)
+    render(conn, "index.html", holidays: holidays, start_date: start_date, end_date: end_date)
   end
 
   def new(conn, _params) do
