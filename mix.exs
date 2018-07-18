@@ -12,7 +12,13 @@ defmodule HolidayApp.Mixfile do
       aliases: aliases(),
       deps: deps(),
       test_coverage: [tool: ExCoveralls],
-      preferred_cli_env: [coveralls: :test, "coveralls.detail": :test, "coveralls.html": :test]
+      preferred_cli_env: [coveralls: :test, "coveralls.detail": :test, "coveralls.html": :test],
+      docs: [
+        extras: [
+          "README.md": [filename: "readme", title: "Readme"]
+        ],
+        main: "readme"
+      ]
     ]
   end
 
@@ -45,7 +51,8 @@ defmodule HolidayApp.Mixfile do
       {:cowboy, "~> 1.0"},
       {:ex_machina, "~> 2.2", only: :test},
       {:timex, "~> 3.0"},
-      {:excoveralls, "~> 0.8", only: :test}
+      {:excoveralls, "~> 0.8", only: :test},
+      {:ex_doc, "~> 0.18", only: :dev, runtime: false}
     ]
   end
 
